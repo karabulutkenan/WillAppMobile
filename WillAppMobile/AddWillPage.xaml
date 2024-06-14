@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WillAppMobile.AddWillPage"
+             Title="Yeni Vasiyet Ekle">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="30">
+            <Entry x:Name="titleEntry" Placeholder="Vasiyet Başlığı" />
+            <Editor x:Name="detailsEditor" Placeholder="Vasiyet Detayları" HeightRequest="200" />
+            <Button Text="Dosya Ekle" Clicked="OnUploadFileClicked" />
+            <CollectionView x:Name="filesList" ItemsSource="{Binding Files}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Padding="10">
+                            <Label Text="{Binding FileName}" FontSize="Medium" />
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Button Text="Vasiyeti Kaydet" Clicked="SaveWillClicked" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

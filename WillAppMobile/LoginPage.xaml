@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WillAppMobile.LoginPage"
+             BackgroundColor="{StaticResource White}">
+
+    <ContentPage.Content>
+        <VerticalStackLayout Spacing="30" Padding="30" HorizontalOptions="Center" VerticalOptions="Center">
+            <Image Source="user_icon.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+            <Label Text="VASİYET'E HOŞGELDİNİZ" Style="{StaticResource WelcomeLabelStyle}" />
+            <BoxView Style="{StaticResource SeparatorStyle}" />
+
+            <Button Text="GİRİŞ" Style="{StaticResource LoginButtonStyle}" Clicked="OnLoginClicked" />
+            <Button Text="KAYIT OL" Style="{StaticResource LoginButtonStyle}" Clicked="OnSignUpClicked" />
+
+            <Label Text="Şifrenizi mi unuttunuz?" Style="{StaticResource ForgotPasswordLabelStyle}" />
+        </VerticalStackLayout>
+    </ContentPage.Content>
+</ContentPage>

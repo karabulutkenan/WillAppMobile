@@ -10,6 +10,9 @@
             <Label Text="VASİYET'E HOŞGELDİNİZ" Style="{StaticResource WelcomeLabelStyle}" />
             <BoxView Style="{StaticResource SeparatorStyle}" />
 
+            <Entry x:Name="emailEntry" Placeholder="E-posta" Keyboard="Email" />
+            <Entry x:Name="passwordEntry" Placeholder="Şifre" IsPassword="True" />
+
             <Button Text="GİRİŞ" Style="{StaticResource LoginButtonStyle}" Clicked="OnLoginClicked" />
             <Button Text="KAYIT OL" Style="{StaticResource LoginButtonStyle}" Clicked="OnSignUpClicked" />
 

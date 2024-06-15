@@ -1,14 +1,15 @@
-using System.Net.Http;
-using System.Text.Json;
-using System.Threading.Tasks;
+using WillAppMobile.Services;
 
 namespace WillAppMobile;
 
 public partial class SignupPage : ContentPage
 {
+    private readonly EDevletService eDevletService;
+
     public SignupPage()
     {
         InitializeComponent();
+        eDevletService = new EDevletService();
     }
 
     private async void OnSignupClicked(object sender, EventArgs e)
@@ -33,7 +34,7 @@ public partial class SignupPage : ContentPage
             return;
         }
 
-        bool isValid = await ValidateWithEDevlet(tc, name, surname);
+        bool isValid = await eDevletService.ValidateIdentity(tc, name, surname);
 
         if (isValid)
         {
@@ -45,24 +46,4 @@ public partial class SignupPage : ContentPage
             await DisplayAlert("Hata", "Geçersiz kimlik bilgileri.", "Tamam");
         }
     }
-
-    private async Task<bool> ValidateWithEDevlet(string tc, string name, string surname)
-    {
-        using (var client = new HttpClient())
-        {
-            var response = await client.GetAsync($"https://tckimlik.nvi.gov.tr/Modul/TcKimlikNoDogrula?TCKimlikNo={tc}&Ad={name}&Soyad={surname}");
-            if (response.IsSuccessStatusCode)
-            {
-                var jsonResponse = await response.Content.ReadAsStringAsync();
-                var result = JsonSerializer.Deserialize<EDevletResponse>(jsonResponse);
-                return result.return; // E-Devlet API response should have a proper return field for validation
-            }
-            return false;
-        }
-    }
-}
-
-public class EDevletResponse
-{
-    public bool return { get; set; }
 }

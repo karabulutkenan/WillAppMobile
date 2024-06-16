@@ -1,10 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WillAppMobile.MainPage">
-
-    
 
     <ContentPage.Content>
         <ScrollView>
@@ -16,7 +13,7 @@
                 <HorizontalStackLayout Spacing="10">
                     <Button Text="Vasiyetim 1" BackgroundColor="Black" TextColor="White" />
                     <Button Text="Vasiyetim 2" BackgroundColor="Black" TextColor="White" />
-                    <Button Text="Mezar Taşım" BackgroundColor="Black" TextColor="White" />
+                    <Button Text="Mezar Taşım" BackgroundColor="Black" TextColor="White" Clicked="OnMezarTasimClicked" />
                 </HorizontalStackLayout>
                 <HorizontalStackLayout Spacing="10">
                     <Button Text="Boş Kayıtlar" BackgroundColor="LightGray" TextColor="Black" />
@@ -26,13 +23,12 @@
 
                 <Label Text="anamenü" FontSize="18" TextColor="#7b9ebf" />
                 <VerticalStackLayout Spacing="10">
-                    <Button Text="VASİYETLERİM >" BackgroundColor="Black" TextColor="White" />
-                    <Button Text="MEZAR TAŞIM >" BackgroundColor="Black" TextColor="White" />
-                    <Button Text="AYARLAR >" BackgroundColor="Black" TextColor="White" />
+                    <Button Text="VASİYETLERİM >" BackgroundColor="Black" TextColor="White" Clicked="OnVasiyetlerimClicked" />
+                    <Button Text="MEZAR TAŞIM >" BackgroundColor="Black" TextColor="White" Clicked="OnMezarTasimClicked" />
+                    <Button Text="AYARLAR >" BackgroundColor="Black" TextColor="White" Clicked="OnAyarlarClicked" />
                 </VerticalStackLayout>
+                <Button Text="ÇIKIŞ" BackgroundColor="Red" TextColor="White" Clicked="OnLogoutClicked" Margin="10,20,10,10"/>
             </VerticalStackLayout>
         </ScrollView>
     </ContentPage.Content>
 </ContentPage>
-
-

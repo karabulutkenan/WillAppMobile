@@ -30,7 +30,7 @@ namespace WillAppMobile
 
         private async void OnSignUpClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new SignupPage());
+            await Navigation.PushModalAsync(new SignupPage());
         }
     }
 }

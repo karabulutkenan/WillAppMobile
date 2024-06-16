@@ -10,14 +10,12 @@ namespace WillAppMobile.Services
 
         public async Task<bool> ValidateIdentity(string tc, string name, string surname)
         {
-            var url = $"https://tckimlik.nvi.gov.tr/Modul/TcKimlikNoDogrula?TCKimlikNo={tc}&Ad={name}&Soyad={surname}";
-            var response = await client.GetAsync(url);
-
+            var response = await client.GetAsync($"https://tckimlik.nvi.gov.tr/Modul/TcKimlikNoDogrula?TCKimlikNo={tc}&Ad={name}&Soyad={surname}");
             if (response.IsSuccessStatusCode)
             {
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var result = JsonSerializer.Deserialize<EDevletResponse>(jsonResponse);
-                return result != null && result.Return;
+                return result.@return;
             }
             return false;
         }
@@ -25,6 +23,6 @@ namespace WillAppMobile.Services
 
     public class EDevletResponse
     {
-        public bool Return { get; set; }
+        public bool @return { get; set; }
     }
 }

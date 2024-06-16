@@ -10,22 +10,28 @@ namespace WillAppMobile
             InitializeComponent();
         }
 
-        private async void OnMenuClicked(object sender, EventArgs e)
+        private async void OnVasiyetlerimClicked(object sender, EventArgs e)
         {
-            string action = await DisplayActionSheet("Menü", "İptal", null, "Vasiyetlerim", "Mezar Taşım", "Ayarlar");
-            switch (action)
+            await Navigation.PushAsync(new WillsPage());
+        }
+
+        private async void OnMezarTasimClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new TombStonePage());
+        }
+
+        private async void OnAyarlarClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new SettingsPage());
+        }
+
+        private async void OnLogoutClicked(object sender, EventArgs e)
+        {
+            bool confirm = await DisplayAlert("Çıkış", "Çıkmak istediğinizden emin misiniz?", "Evet", "Hayır");
+            if (confirm)
             {
-                case "Vasiyetlerim":
-                    await Navigation.PushAsync(new WillsPage());
-                    break;
-                case "Mezar Taşım":
-                    await Navigation.PushAsync(new TombStonePage());
-                    break;
-                case "Ayarlar":
-                    await Navigation.PushAsync(new SettingsPage());
-                    break;
+                Application.Current.MainPage = new LoginPage();
             }
         }
     }
 }
-

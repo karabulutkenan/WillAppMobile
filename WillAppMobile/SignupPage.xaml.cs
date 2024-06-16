@@ -1,49 +1,53 @@
 using WillAppMobile.Services;
+using Microsoft.Maui.Controls;
+using System;
 
-namespace WillAppMobile;
-
-public partial class SignupPage : ContentPage
+namespace WillAppMobile
 {
-    private readonly EDevletService eDevletService;
-
-    public SignupPage()
+    public partial class SignupPage : ContentPage
     {
-        InitializeComponent();
-        eDevletService = new EDevletService();
-    }
+        private readonly EDevletService eDevletService;
 
-    private async void OnSignupClicked(object sender, EventArgs e)
-    {
-        string tc = tcEntry.Text;
-        string name = nameEntry.Text;
-        string surname = surnameEntry.Text;
-        string email = emailEntry.Text;
-        string phone = phoneEntry.Text;
-        string password = passwordEntry.Text;
-        string confirmPassword = confirmPasswordEntry.Text;
-
-        if (tc.Length != 11)
+        public SignupPage()
         {
-            await DisplayAlert("Hata", "TC Kimlik Numarasý 11 hane olmalýdýr.", "Tamam");
-            return;
+            InitializeComponent();
+            eDevletService = new EDevletService();
         }
 
-        if (password != confirmPassword)
+        private async void OnSignupClicked(object sender, EventArgs e)
         {
-            await DisplayAlert("Hata", "Þifreler eþleþmiyor.", "Tamam");
-            return;
-        }
+            string tc = tcEntry.Text;
+            string name = nameEntry.Text;
+            string surname = surnameEntry.Text;
+            string email = emailEntry.Text;
+            string phone = phoneEntry.Text;
+            string password = passwordEntry.Text;
+            string confirmPassword = confirmPasswordEntry.Text;
 
-        bool isValid = await eDevletService.ValidateIdentity(tc, name, surname);
+            if (tc.Length != 11)
+            {
+                await DisplayAlert("Hata", "TC Kimlik Numarasý 11 hane olmalýdýr.", "Tamam");
+                return;
+            }
 
-        if (isValid)
-        {
-            // Üyelik oluþturma iþlemleri
-            await DisplayAlert("Baþarýlý", "Üyelik baþarýyla oluþturuldu.", "Tamam");
-        }
-        else
-        {
-            await DisplayAlert("Hata", "Geçersiz kimlik bilgileri.", "Tamam");
+            if (password != confirmPassword)
+            {
+                await DisplayAlert("Hata", "Þifreler eþleþmiyor.", "Tamam");
+                return;
+            }
+
+            bool isValid = await eDevletService.ValidateIdentity(tc, name, surname);
+
+            if (isValid)
+            {
+                // Üyelik oluþturma iþlemleri
+                await DisplayAlert("Baþarýlý", "Üyelik baþarýyla oluþturuldu.", "Tamam");
+                await Navigation.PopModalAsync(); // Giriþ sayfasýna dön
+            }
+            else
+            {
+                await DisplayAlert("Hata", "Geçersiz kimlik bilgileri.", "Tamam");
+            }
         }
     }
 }

@@ -4,7 +4,6 @@
        xmlns:local="clr-namespace:WillAppMobile"
        x:Class="WillAppMobile.AppShell">
 
-    <!-- Flyout menu -->
     <FlyoutItem Title="Ana Sayfa">
         <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
     </FlyoutItem>
@@ -16,12 +15,5 @@
     </FlyoutItem>
     <FlyoutItem Title="Ayarlar">
         <ShellContent ContentTemplate="{DataTemplate local:SettingsPage}" />
-    </FlyoutItem>
-
-    <!-- Çıkış butonu -->
-    <FlyoutItem Title="Çıkış">
-        <ShellContent>
-            <local:LoginPage />
-        </ShellContent>
     </FlyoutItem>
 </Shell>

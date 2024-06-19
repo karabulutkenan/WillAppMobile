@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31611.283
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WillAppMobile", "WillAppMobile\WillAppMobile.csproj", "{ABFE9042-F2F6-458C-998A-AEC445237190}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WillAppMobileData", "..\WillAppMobileData\WillAppMobileData\WillAppMobileData.csproj", "{DEAA47A3-5CD0-44A4-A8C6-5C41D8D75408}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +19,10 @@ Global
 		{ABFE9042-F2F6-458C-998A-AEC445237190}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABFE9042-F2F6-458C-998A-AEC445237190}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ABFE9042-F2F6-458C-998A-AEC445237190}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{DEAA47A3-5CD0-44A4-A8C6-5C41D8D75408}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEAA47A3-5CD0-44A4-A8C6-5C41D8D75408}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEAA47A3-5CD0-44A4-A8C6-5C41D8D75408}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEAA47A3-5CD0-44A4-A8C6-5C41D8D75408}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

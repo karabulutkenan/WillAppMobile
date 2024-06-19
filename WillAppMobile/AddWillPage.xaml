@@ -2,23 +2,25 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WillAppMobile.AddWillPage"
-             Title="Yeni Vasiyet Ekle">
+             Title="Vasiyet Ekle">
 
     <ScrollView>
         <VerticalStackLayout Spacing="20" Padding="30">
-            <Entry x:Name="titleEntry" Placeholder="Vasiyet Başlığı" />
-            <Editor x:Name="detailsEditor" Placeholder="Vasiyet Detayları" HeightRequest="200" />
-            <Button Text="Dosya Ekle" Clicked="OnUploadFileClicked" />
-            <CollectionView x:Name="filesList" ItemsSource="{Binding Files}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <StackLayout Padding="10">
-                            <Label Text="{Binding FileName}" FontSize="Medium" />
-                        </StackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-            <Button Text="Vasiyeti Kaydet" Clicked="SaveWillClicked" />
+            <Entry x:Name="titleEntry" Placeholder="Vasiyet Başlığı"/>
+            <Entry x:Name="summaryEntry" Placeholder="Vasiyet Özeti"/>
+            <Editor x:Name="detailsEditor" Placeholder="Vasiyet Detayları" HeightRequest="200"/>
+            <Picker x:Name="executorPicker" Title="Vasi Seç">
+                <Picker.Items>
+                    <x:String>Yeni Vasi Ekle</x:String>
+                </Picker.Items>
+            </Picker>
+            <StackLayout x:Name="newExecutorDetails" IsVisible="False">
+                <Entry x:Name="executorFirstNameEntry" Placeholder="Vasi Adı"/>
+                <Entry x:Name="executorLastNameEntry" Placeholder="Vasi Soyadı"/>
+                <Entry x:Name="executorEmailEntry" Placeholder="Vasi E-posta"/>
+            </StackLayout>
+            <Button Text="Dosya Ekle" Clicked="OnUploadFileClicked"/>
+            <Button Text="Vasiyeti Kaydet" Clicked="SaveWillClicked"/>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

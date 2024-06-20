@@ -2,12 +2,33 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WillAppMobile.TombStonePage"
-             Title="Mezar Taşım">
+             BackgroundColor="{StaticResource White}">
 
-    <VerticalStackLayout Spacing="20" Padding="30">
-        <Label Text="Mezar Taşı Yönetimi"
-               FontSize="22"
-               HorizontalOptions="Center" />
-        <!-- Mezar taşı bilgileri ve yönetim butonları eklenebilir -->
-    </VerticalStackLayout>
+    <ContentPage.Content>
+        <ScrollView>
+            <VerticalStackLayout Spacing="20" Padding="30">
+                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                    <Image x:Name="profileImage" WidthRequest="100" HeightRequest="100" />
+                    <Label x:Name="userNameLabel" FontSize="24" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+
+                <Label Text="Gönderiler" FontSize="18" TextColor="Black" />
+
+                <CollectionView x:Name="postsCollectionView">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Margin="10" Padding="10" BackgroundColor="LightGray">
+                                <StackLayout>
+                                    <Image Source="{Binding MediaUrl}" HeightRequest="200" />
+                                    <Label Text="{Binding Content}" FontSize="14" TextColor="Black" />
+                                </StackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Label x:Name="noPostsLabel" Text="Hiç gönderi yok." IsVisible="False" FontSize="14" TextColor="Gray" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </ContentPage.Content>
 </ContentPage>

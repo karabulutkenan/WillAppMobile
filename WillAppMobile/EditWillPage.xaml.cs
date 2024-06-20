@@ -3,39 +3,55 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using WillAppMobileData.Models;
-using WillAppMobileData;
-using Microsoft.EntityFrameworkCore;
+using WillAppMobileData.Repositories;
 
 namespace WillAppMobile
 {
-    public partial class AddWillPage : ContentPage
+    public partial class EditWillPage : ContentPage
     {
-        private readonly AppDbContext _context;
         public ObservableCollection<string> Files { get; set; } = new ObservableCollection<string>();
         public ObservableCollection<Executor> Executors { get; set; } = new ObservableCollection<Executor>();
+        private Will _will;
 
-        public AddWillPage(AppDbContext context)
+        public EditWillPage(Will will)
         {
             InitializeComponent();
-            _context = context;
+            _will = will;
             BindingContext = this;
+
+            titleEntry.Text = _will.Title;
+            summaryEntry.Text = _will.Summary;
+            detailsEditor.Text = _will.Details;
             LoadExecutors();
+            LoadFiles();
         }
 
         private async void LoadExecutors()
         {
-            var executors = await _context.Executors.ToListAsync();
-            foreach (var executor in executors)
+            // Vasi listesini yükleme simülasyonu, burada veritabanýndan yüklenecek
+            Executors.Add(new Executor { FirstName = "Ahmet", LastName = "Yýlmaz", Email = "ahmet@example.com" });
+            foreach (var executor in Executors)
             {
-                Executors.Add(executor);
                 executorPicker.Items.Add($"{executor.FirstName} {executor.LastName}");
             }
-            executorPicker.Items.Add("Yeni Vasi Ekle");
+
+            if (_will.Executor != null)
+            {
+                executorPicker.SelectedItem = $"{_will.Executor.FirstName} {_will.Executor.LastName}";
+            }
+        }
+
+        private void LoadFiles()
+        {
+            foreach (var file in _will.Files)
+            {
+                Files.Add(file.FilePath);
+            }
         }
 
         private void OnExecutorSelected(object sender, EventArgs e)
         {
-            if (executorPicker.SelectedIndex == executorPicker.Items.Count - 1) // "Yeni Vasi Ekle" seçeneði
+            if (executorPicker.SelectedIndex == 0) // "Yeni Vasi Ekle" seçeneði
             {
                 newExecutorDetails.IsVisible = true;
             }
@@ -60,9 +76,9 @@ namespace WillAppMobile
         private async void SaveWillClicked(object sender, EventArgs e)
         {
             Executor selectedExecutor = null;
-            if (executorPicker.SelectedIndex < executorPicker.Items.Count - 1)
+            if (executorPicker.SelectedIndex > 0)
             {
-                selectedExecutor = Executors[executorPicker.SelectedIndex];
+                selectedExecutor = Executors[executorPicker.SelectedIndex - 1]; // "Yeni Vasi Ekle" düzeltmesi
             }
             else
             {
@@ -72,24 +88,19 @@ namespace WillAppMobile
                     LastName = executorLastNameEntry.Text,
                     Email = executorEmailEntry.Text
                 };
-
-                _context.Executors.Add(selectedExecutor);
-                await _context.SaveChangesAsync();
             }
 
-            var newWill = new Will
-            {
-                Title = titleEntry.Text,
-                Summary = summaryEntry.Text,
-                Details = detailsEditor.Text,
-                Executor = selectedExecutor,
-                Files = Files.Select(f => new WillAppMobileData.Models.File { Path = f }).ToList()
-            };
+            _will.Title = titleEntry.Text;
+            _will.Summary = summaryEntry.Text;
+            _will.Details = detailsEditor.Text;
+            _will.Executor = selectedExecutor;
+            _will.Files = Files.Select(f => new WillAppMobileData.Models.File { FilePath = f }).ToList();
 
-            _context.Wills.Add(newWill);
-            await _context.SaveChangesAsync();
+            // Veritabanýna kaydetme iþlemi burada gerçekleþtirilir
+            var willRepository = new WillRepository(App.Database);
+            await willRepository.UpdateWillAsync(_will);
 
-            await DisplayAlert("Baþarýlý", "Vasiyet kaydedildi", "OK");
+            await DisplayAlert("Baþarýlý", "Vasiyet güncellendi", "OK");
             await Navigation.PopAsync(); // Önceki sayfaya dön.
         }
     }

@@ -2,11 +2,13 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WillAppMobile.SettingsPage"
-             Title="SettingsPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+             BackgroundColor="{StaticResource White}">
+
+    <VerticalStackLayout Spacing="25" Padding="30">
+        <Label Text="Ayarlar" FontSize="24" HorizontalOptions="Center" />
+
+        <Button Text="Profil Ayarları" Clicked="OnProfileSettingsClicked" />
+        <Button Text="Bildirim Ayarları" Clicked="OnNotificationSettingsClicked" />
+        <Button Text="Hesabı Sil" Clicked="OnDeleteAccountClicked" />
     </VerticalStackLayout>
 </ContentPage>

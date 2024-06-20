@@ -1,33 +1,27 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="WillAppMobile.AddWillPage"
+             x:Class="WillAppMobile.EditWillPage"
              BackgroundColor="{StaticResource White}">
 
     <VerticalStackLayout Spacing="25" Padding="30" HorizontalOptions="Center" VerticalOptions="Center">
-        <Label Text="Yeni Vasiyet Ekle" FontSize="24" HorizontalOptions="Center" />
+        <Label Text="Vasiyet Düzenle" FontSize="24" HorizontalOptions="Center" />
 
         <Entry x:Name="titleEntry" Placeholder="Vasiyet Başlığı" />
-        <Entry x:Name="summaryEntry" Placeholder="Vasiyet Özeti" />
-        <Editor x:Name="detailsEditor" Placeholder="Vasiyet Detayları" HeightRequest="100" />
+        <Entry x:Name="summaryEntry" Placeholder="Özet" />
+        <Editor x:Name="detailsEditor" Placeholder="Detaylar" HeightRequest="150" />
 
-        <Label Text="Vasi Seç" FontSize="18" />
+        <Label Text="Vasi Seçin" FontSize="18" HorizontalOptions="Center" />
         <Picker x:Name="executorPicker" SelectedIndexChanged="OnExecutorSelected" />
 
         <StackLayout x:Name="newExecutorDetails" IsVisible="False">
             <Entry x:Name="executorFirstNameEntry" Placeholder="Vasi Adı" />
             <Entry x:Name="executorLastNameEntry" Placeholder="Vasi Soyadı" />
-            <Entry x:Name="executorEmailEntry" Placeholder="Vasi E-posta" Keyboard="Email" />
+            <Entry x:Name="executorEmailEntry" Placeholder="Vasi E-postası" />
         </StackLayout>
 
         <Button Text="Dosya Yükle" Clicked="OnUploadFileClicked" />
-        <CollectionView ItemsSource="{Binding Files}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <TextCell Text="{Binding FileName}" />
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+        <ListView x:Name="filesListView" ItemsSource="{Binding Files}" />
 
         <Button Text="Kaydet" Clicked="SaveWillClicked" />
     </VerticalStackLayout>

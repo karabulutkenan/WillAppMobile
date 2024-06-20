@@ -2,32 +2,24 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WillAppMobile.WillsPage"
-             Title="Vasiyetlerim">
+             BackgroundColor="{StaticResource White}">
 
-    <ScrollView>
-        <VerticalStackLayout Spacing="20" Padding="30">
-            <Button Text="Yeni Vasiyet Ekle"
-                    Command="{Binding AddNewWillCommand}"
-                    HorizontalOptions="FillAndExpand" />
-            <CollectionView x:Name="willsList">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <StackLayout Padding="10" Orientation="Horizontal">
-                            <Label Text="{Binding Title}"
-                                   FontSize="Medium"
-                                   VerticalOptions="Center"
-                                   HorizontalOptions="StartAndExpand" />
-                            <Button Text="Düzenle"
-                                    Command="{Binding EditCommand}"
-                                    CommandParameter="{Binding .}" />
-                            <Button Text="Sil"
-                                    Command="{Binding DeleteCommand}"
-                                    CommandParameter="{Binding .}" />
-                        </StackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </VerticalStackLayout>
-    </ScrollView>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Ekle" Clicked="OnAddNewWillClicked"/>
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <CollectionView ItemsSource="{Binding Wills}" SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Padding="10" Orientation="Vertical" BackgroundColor="LightGray" Margin="5">
+                        <Label Text="{Binding Title}" FontSize="20" />
+                        <Label Text="{Binding Summary}" FontSize="14" TextColor="Gray" />
+                        <Button Text="Düzenle" Clicked="OnEditWillClicked" CommandParameter="{Binding .}" />
+                        <Button Text="Sil" Clicked="OnDeleteWillClicked" CommandParameter="{Binding .}" />
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </ContentPage.Content>
 </ContentPage>
-

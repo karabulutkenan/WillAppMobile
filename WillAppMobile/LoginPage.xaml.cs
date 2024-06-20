@@ -1,13 +1,18 @@
 using Microsoft.Maui.Controls;
 using System;
+using WillAppMobileData.Models;
+using WillAppMobileData.Repositories;
 
 namespace WillAppMobile
 {
     public partial class LoginPage : ContentPage
     {
+        private readonly UserRepository _userRepository;
+
         public LoginPage()
         {
             InitializeComponent();
+            _userRepository = new UserRepository(App.Database);
         }
 
         private async void OnLoginClicked(object sender, EventArgs e)
@@ -15,8 +20,9 @@ namespace WillAppMobile
             string email = emailEntry.Text;
             string password = passwordEntry.Text;
 
-            // Basit bir doðrulama (gerçek bir doðrulama mekanizmasý kullanýlabilir)
-            if (email == "user@example.com" && password == "password")
+            var user = await _userRepository.GetUserByEmailAsync(email);
+
+            if (user != null && VerifyPassword(password, user.PasswordHash))
             {
                 await DisplayAlert("Bilgi", "Giriþ baþarýlý!", "Tamam");
                 // Ana sayfaya yönlendir
@@ -31,6 +37,14 @@ namespace WillAppMobile
         private async void OnSignUpClicked(object sender, EventArgs e)
         {
             await Navigation.PushModalAsync(new SignupPage());
+        }
+
+        private bool VerifyPassword(string password, string storedHash)
+        {
+            // Þifre doðrulama mantýðý burada olacak
+            // Örneðin, BCrypt kullanarak:
+            // return BCrypt.Net.BCrypt.Verify(password, storedHash);
+            return password == storedHash; // Basit bir doðrulama örneði
         }
     }
 }

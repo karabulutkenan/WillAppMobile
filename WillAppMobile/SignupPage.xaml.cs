@@ -1,52 +1,81 @@
-using WillAppMobile.Services;
 using Microsoft.Maui.Controls;
 using System;
+using System.IO;
+using WillAppMobileData;
+using WillAppMobileData.Models;
+using WillAppMobileData.Repositories;
+
+using Microsoft.Maui.Controls;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
+using WillAppMobileData.Models;
+using WillAppMobileData.Repositories;
 
 namespace WillAppMobile
 {
     public partial class SignupPage : ContentPage
     {
-        private readonly EDevletService eDevletService;
+        private readonly UserRepository _userRepository;
+        private byte[] _photo;
 
         public SignupPage()
         {
             InitializeComponent();
-            eDevletService = new EDevletService();
+            _userRepository = new UserRepository(App.Database);
+        }
+
+        private async void OnUploadPhotoClicked(object sender, EventArgs e)
+        {
+            var result = await FilePicker.Default.PickAsync(new PickOptions
+            {
+                PickerTitle = "Profil Fotoðrafý Seç",
+                FileTypes = FilePickerFileType.Images
+            });
+
+            if (result != null)
+            {
+                using (var stream = await result.OpenReadAsync())
+                using (var memoryStream = new MemoryStream())
+                {
+                    await stream.CopyToAsync(memoryStream);
+                    _photo = memoryStream.ToArray();
+                }
+            }
         }
 
         private async void OnSignupClicked(object sender, EventArgs e)
         {
-            string tc = tcEntry.Text;
-            string name = nameEntry.Text;
-            string surname = surnameEntry.Text;
-            string email = emailEntry.Text;
-            string phone = phoneEntry.Text;
-            string password = passwordEntry.Text;
-            string confirmPassword = confirmPasswordEntry.Text;
-
-            if (tc.Length != 11)
+            if (passwordEntry.Text != confirmPasswordEntry.Text)
             {
-                await DisplayAlert("Hata", "TC Kimlik Numarasý 11 hane olmalýdýr.", "Tamam");
+                await DisplayAlert("Hata", "Þifreler uyuþmuyor.", "Tamam");
                 return;
             }
 
-            if (password != confirmPassword)
+            var newUser = new User
             {
-                await DisplayAlert("Hata", "Þifreler eþleþmiyor.", "Tamam");
-                return;
-            }
+                FirstName = nameEntry.Text,
+                LastName = surnameEntry.Text,
+                Email = emailEntry.Text,
+                PhoneNumber = phoneEntry.Text,
+                PasswordHash = ComputeHash(passwordEntry.Text),
+                Photo = _photo
+            };
 
-            bool isValid = await eDevletService.ValidateIdentity(tc, name, surname);
+            await _userRepository.AddUserAsync(newUser);
+            await DisplayAlert("Baþarýlý", "Üyelik oluþturuldu.", "Tamam");
+            await Navigation.PopModalAsync();
+        }
 
-            if (isValid)
+        private string ComputeHash(string input)
+        {
+            using (var sha256 = SHA256.Create())
             {
-                // Üyelik oluþturma iþlemleri
-                await DisplayAlert("Baþarýlý", "Üyelik baþarýyla oluþturuldu.", "Tamam");
-                await Navigation.PopModalAsync(); // Giriþ sayfasýna dön
-            }
-            else
-            {
-                await DisplayAlert("Hata", "Geçersiz kimlik bilgileri.", "Tamam");
+                var bytes = Encoding.UTF8.GetBytes(input);
+                var hash = sha256.ComputeHash(bytes);
+                return Convert.ToBase64String(hash);
             }
         }
     }

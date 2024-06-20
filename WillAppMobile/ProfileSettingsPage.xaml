@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WillAppMobile.ProfileSettingsPage"
+             BackgroundColor="{StaticResource White}">
+
+    <ContentPage.Content>
+        <ScrollView>
+            <VerticalStackLayout Spacing="25" Padding="30" HorizontalOptions="Center" VerticalOptions="Center">
+                <Label Text="Profil Ayarları" FontSize="24" HorizontalOptions="Center" />
+
+                <Image x:Name="profileImage" WidthRequest="100" HeightRequest="100" Aspect="AspectFill" />
+                <Button Text="Fotoğraf Yükle" Clicked="OnUploadPhotoClicked" />
+
+                <Entry x:Name="firstNameEntry" Placeholder="Ad" />
+                <Entry x:Name="lastNameEntry" Placeholder="Soyad" />
+                <Entry x:Name="emailEntry" Placeholder="E-posta" Keyboard="Email" />
+                <Entry x:Name="phoneEntry" Placeholder="Telefon Numarası" Keyboard="Telephone" />
+
+                <Button Text="Kaydet" Clicked="OnSaveClicked" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

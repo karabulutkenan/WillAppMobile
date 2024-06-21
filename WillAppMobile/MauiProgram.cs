@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using WillAppMobileData;
+using WillAppMobileData;  // Ekle
+using WillAppMobileData.Models;  // Ekle
+using WillAppMobileData.Repositories;  // Ekle
 
 namespace WillAppMobile;
 

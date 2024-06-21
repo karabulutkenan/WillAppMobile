@@ -1,5 +1,8 @@
 ﻿using Microsoft.Maui.Controls;
 using System;
+using WillAppMobileData;  // Ekle
+using WillAppMobileData.Models;  // Ekle
+using WillAppMobileData.Repositories;  // Ekle
 
 namespace WillAppMobile
 {

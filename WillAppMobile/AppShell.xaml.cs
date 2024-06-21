@@ -1,4 +1,7 @@
 ﻿using Microsoft.Maui.Controls;
+using WillAppMobileData;  // Ekle
+using WillAppMobileData.Models;  // Ekle
+using WillAppMobileData.Repositories;  // Ekle
 
 namespace WillAppMobile
 {
@@ -9,7 +12,7 @@ namespace WillAppMobile
             InitializeComponent();
         }
 
-        private async void OnLogoutClicked(object sender, EventArgs e)
+        private void OnLogoutClicked(object sender, EventArgs e) // 'async' ifadesini kaldırdık
         {
             Application.Current.MainPage = new LoginPage();
         }

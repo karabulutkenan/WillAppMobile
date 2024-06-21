@@ -1,5 +1,8 @@
 using Microsoft.Maui.Controls;
 using System;
+using WillAppMobileData;  // Ekle
+using WillAppMobileData.Models;  // Ekle
+using WillAppMobileData.Repositories;  // Ekle
 
 namespace WillAppMobile
 {
@@ -18,8 +21,8 @@ namespace WillAppMobile
 
         private async void OnNotificationSettingsClicked(object sender, EventArgs e)
         {
-            // Bildirim ayarlarý sayfasýna yönlendirme
-            await Navigation.PushAsync(new NotificationSettingsPage());
+            // Bildirim ayarlarý sayfasýna yönlendirme veya bildirim ayarlarýný açma
+            await DisplayAlert("Bildirim Ayarlarý", "Bildirim ayarlarý açýldý.", "Tamam");
         }
 
         private async void OnDeleteAccountClicked(object sender, EventArgs e)

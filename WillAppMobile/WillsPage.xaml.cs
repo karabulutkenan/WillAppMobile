@@ -1,7 +1,8 @@
 using Microsoft.Maui.Controls;
 using System.Collections.ObjectModel;
-using WillAppMobileData.Models;
-using WillAppMobileData.Repositories;
+using WillAppMobileData;  // Ekle
+using WillAppMobileData.Models;  // Ekle
+using WillAppMobileData.Repositories;  // Ekle
 
 namespace WillAppMobile
 {
@@ -31,7 +32,7 @@ namespace WillAppMobile
             }
         }
 
-        private async void OnAddNewWill(object sender, EventArgs e)
+        private async void OnAddNewWillClicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new AddWillPage());
         }

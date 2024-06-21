@@ -1,25 +1,18 @@
 using Microsoft.Maui.Controls;
 using System;
-using System.IO;
-using WillAppMobileData;
-using WillAppMobileData.Models;
-using WillAppMobileData.Repositories;
-
-using Microsoft.Maui.Controls;
-using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
-using WillAppMobileData.Models;
-using WillAppMobileData.Repositories;
+using System.IO;
+using WillAppMobileData;  // Ekle
+using WillAppMobileData.Models;  // Ekle
+using WillAppMobileData.Repositories;  // Ekle
 
 namespace WillAppMobile
 {
     public partial class SignupPage : ContentPage
     {
         private readonly UserRepository _userRepository;
-        private byte[] _photo;
+        private string _photoPath;
 
         public SignupPage()
         {
@@ -27,55 +20,60 @@ namespace WillAppMobile
             _userRepository = new UserRepository(App.Database);
         }
 
-        private async void OnUploadPhotoClicked(object sender, EventArgs e)
-        {
-            var result = await FilePicker.Default.PickAsync(new PickOptions
-            {
-                PickerTitle = "Profil Fotoðrafý Seç",
-                FileTypes = FilePickerFileType.Images
-            });
-
-            if (result != null)
-            {
-                using (var stream = await result.OpenReadAsync())
-                using (var memoryStream = new MemoryStream())
-                {
-                    await stream.CopyToAsync(memoryStream);
-                    _photo = memoryStream.ToArray();
-                }
-            }
-        }
-
         private async void OnSignupClicked(object sender, EventArgs e)
         {
-            if (passwordEntry.Text != confirmPasswordEntry.Text)
+            var tc = tcEntry.Text;
+            var name = nameEntry.Text;
+            var surname = surnameEntry.Text;
+            var email = emailEntry.Text;
+            var phone = phoneEntry.Text;
+            var password = passwordEntry.Text;
+            var confirmPassword = confirmPasswordEntry.Text;
+
+            if (password != confirmPassword)
             {
                 await DisplayAlert("Hata", "Þifreler uyuþmuyor.", "Tamam");
                 return;
             }
 
-            var newUser = new User
+            var user = new User
             {
-                FirstName = nameEntry.Text,
-                LastName = surnameEntry.Text,
-                Email = emailEntry.Text,
-                PhoneNumber = phoneEntry.Text,
-                PasswordHash = ComputeHash(passwordEntry.Text),
-                Photo = _photo
+                FirstName = name,
+                LastName = surname,
+                Email = email,
+                PhoneNumber = phone,
+                PasswordHash = CreatePasswordHash(password),
+                Photo = _photoPath // Hata burada düzeltilmiþtir
             };
 
-            await _userRepository.AddUserAsync(newUser);
+            await _userRepository.AddUserAsync(user);
+
             await DisplayAlert("Baþarýlý", "Üyelik oluþturuldu.", "Tamam");
             await Navigation.PopModalAsync();
         }
 
-        private string ComputeHash(string input)
+        private string CreatePasswordHash(string password)
         {
-            using (var sha256 = SHA256.Create())
+            using (var hmac = new HMACSHA512())
             {
-                var bytes = Encoding.UTF8.GetBytes(input);
-                var hash = sha256.ComputeHash(bytes);
+                var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
                 return Convert.ToBase64String(hash);
+            }
+        }
+
+        private async void OnUploadPhotoClicked(object sender, EventArgs e)
+        {
+            var result = await FilePicker.Default.PickAsync(new PickOptions
+            {
+                PickerTitle = "Fotoðraf Seç",
+                FileTypes = FilePickerFileType.Images
+            });
+
+            if (result != null)
+            {
+                _photoPath = result.FullPath;
+                // Seçilen fotoðrafýn önizlemesini gösterebilirsiniz
+                // profileImage.Source = ImageSource.FromFile(_photoPath);
             }
         }
     }

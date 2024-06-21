@@ -1,7 +1,8 @@
 using Microsoft.Maui.Controls;
 using System;
-using WillAppMobileData.Models;
-using WillAppMobileData.Repositories;
+using WillAppMobileData;  // Ekle
+using WillAppMobileData.Models;  // Ekle
+using WillAppMobileData.Repositories;  // Ekle
 
 namespace WillAppMobile
 {
@@ -24,6 +25,7 @@ namespace WillAppMobile
 
             if (user != null && VerifyPassword(password, user.PasswordHash))
             {
+                App.CurrentUserEmail = user.Email; // CurrentUserEmail'i ayarla
                 await DisplayAlert("Bilgi", "Giriþ baþarýlý!", "Tamam");
                 // Ana sayfaya yönlendir
                 Application.Current.MainPage = new AppShell();

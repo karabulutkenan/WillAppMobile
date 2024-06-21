@@ -2,8 +2,9 @@ using Microsoft.Maui.Controls;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using WillAppMobileData.Models;
-using WillAppMobileData.Repositories;
+using WillAppMobileData;  // Ekle
+using WillAppMobileData.Models;  // Ekle
+using WillAppMobileData.Repositories;  // Ekle
 
 namespace WillAppMobile
 {
@@ -12,11 +13,15 @@ namespace WillAppMobile
         public ObservableCollection<string> Files { get; set; } = new ObservableCollection<string>();
         public ObservableCollection<Executor> Executors { get; set; } = new ObservableCollection<Executor>();
         private Will _will;
+        private ExecutorRepository _executorRepository;
+        private WillRepository _willRepository;
 
         public EditWillPage(Will will)
         {
             InitializeComponent();
             _will = will;
+            _executorRepository = new ExecutorRepository(App.Database);
+            _willRepository = new WillRepository(App.Database);
             BindingContext = this;
 
             titleEntry.Text = _will.Title;
@@ -28,10 +33,11 @@ namespace WillAppMobile
 
         private async void LoadExecutors()
         {
-            // Vasi listesini yükleme simülasyonu, burada veritabanýndan yüklenecek
-            Executors.Add(new Executor { FirstName = "Ahmet", LastName = "Yýlmaz", Email = "ahmet@example.com" });
-            foreach (var executor in Executors)
+            Executors.Clear();
+            var executors = await _executorRepository.GetAllExecutorsAsync();
+            foreach (var executor in executors)
             {
+                Executors.Add(executor);
                 executorPicker.Items.Add($"{executor.FirstName} {executor.LastName}");
             }
 
@@ -88,6 +94,7 @@ namespace WillAppMobile
                     LastName = executorLastNameEntry.Text,
                     Email = executorEmailEntry.Text
                 };
+                await _executorRepository.AddExecutorAsync(selectedExecutor);
             }
 
             _will.Title = titleEntry.Text;
@@ -96,9 +103,7 @@ namespace WillAppMobile
             _will.Executor = selectedExecutor;
             _will.Files = Files.Select(f => new WillAppMobileData.Models.File { FilePath = f }).ToList();
 
-            // Veritabanýna kaydetme iþlemi burada gerçekleþtirilir
-            var willRepository = new WillRepository(App.Database);
-            await willRepository.UpdateWillAsync(_will);
+            await _willRepository.UpdateWillAsync(_will);
 
             await DisplayAlert("Baþarýlý", "Vasiyet güncellendi", "OK");
             await Navigation.PopAsync(); // Önceki sayfaya dön.

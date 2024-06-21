@@ -15,7 +15,7 @@
         <Entry x:Name="passwordEntry" Placeholder="Şifre" IsPassword="True" />
         <Entry x:Name="confirmPasswordEntry" Placeholder="Şifreyi Onayla" IsPassword="True" />
 
-        <Button Text="Profil Fotoğrafı Yükle" Clicked="OnUploadPhotoClicked" />
         <Button Text="Üyelik Oluştur" Clicked="OnSignupClicked" />
+        <Button Text="Fotoğraf Yükle" Clicked="OnUploadPhotoClicked" />
     </VerticalStackLayout>
 </ContentPage>

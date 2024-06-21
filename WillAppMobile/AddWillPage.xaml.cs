@@ -1,41 +1,44 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Maui.Controls;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using WillAppMobileData.Models;
 using WillAppMobileData;
-using Microsoft.EntityFrameworkCore;
+using WillAppMobileData.Models;
+using WillAppMobileData.Repositories;
 
 namespace WillAppMobile
 {
     public partial class AddWillPage : ContentPage
     {
-        private readonly AppDbContext _context;
         public ObservableCollection<string> Files { get; set; } = new ObservableCollection<string>();
         public ObservableCollection<Executor> Executors { get; set; } = new ObservableCollection<Executor>();
 
-        public AddWillPage(AppDbContext context)
+        public AddWillPage()
         {
             InitializeComponent();
-            _context = context;
             BindingContext = this;
             LoadExecutors();
         }
 
         private async void LoadExecutors()
         {
-            var executors = await _context.Executors.ToListAsync();
-            foreach (var executor in executors)
+            using (var context = new AppDbContext(DependencyService.Get<DbContextOptions<AppDbContext>>()))
             {
-                Executors.Add(executor);
-                executorPicker.Items.Add($"{executor.FirstName} {executor.LastName}");
+                var executorRepository = new ExecutorRepository(context);
+                var executors = await executorRepository.GetAllExecutorsAsync();
+                Executors = new ObservableCollection<Executor>(executors);
+                executorPicker.Items.Add("Yeni Vasi Ekle");
+                foreach (var executor in Executors)
+                {
+                    executorPicker.Items.Add($"{executor.FirstName} {executor.LastName}");
+                }
             }
-            executorPicker.Items.Add("Yeni Vasi Ekle");
         }
 
         private void OnExecutorSelected(object sender, EventArgs e)
         {
-            if (executorPicker.SelectedIndex == executorPicker.Items.Count - 1) // "Yeni Vasi Ekle" seçeneði
+            if (executorPicker.SelectedIndex == 0) // "Yeni Vasi Ekle" seçeneði
             {
                 newExecutorDetails.IsVisible = true;
             }
@@ -60,9 +63,9 @@ namespace WillAppMobile
         private async void SaveWillClicked(object sender, EventArgs e)
         {
             Executor selectedExecutor = null;
-            if (executorPicker.SelectedIndex < executorPicker.Items.Count - 1)
+            if (executorPicker.SelectedIndex > 0)
             {
-                selectedExecutor = Executors[executorPicker.SelectedIndex];
+                selectedExecutor = Executors[executorPicker.SelectedIndex - 1]; // "Yeni Vasi Ekle" düzeltmesi
             }
             else
             {
@@ -72,9 +75,6 @@ namespace WillAppMobile
                     LastName = executorLastNameEntry.Text,
                     Email = executorEmailEntry.Text
                 };
-
-                _context.Executors.Add(selectedExecutor);
-                await _context.SaveChangesAsync();
             }
 
             var newWill = new Will
@@ -83,11 +83,14 @@ namespace WillAppMobile
                 Summary = summaryEntry.Text,
                 Details = detailsEditor.Text,
                 Executor = selectedExecutor,
-                Files = Files.Select(f => new WillAppMobileData.Models.File { Path = f }).ToList()
+                Files = Files.Select(file => new WillAppMobileData.Models.File { FilePath = file }).ToList() // Güncellenen kýsým
             };
 
-            _context.Wills.Add(newWill);
-            await _context.SaveChangesAsync();
+            using (var context = new AppDbContext(DependencyService.Get<DbContextOptions<AppDbContext>>()))
+            {
+                var willRepository = new WillRepository(context);
+                await willRepository.AddWillAsync(newWill);
+            }
 
             await DisplayAlert("Baþarýlý", "Vasiyet kaydedildi", "OK");
             await Navigation.PopAsync(); // Önceki sayfaya dön.

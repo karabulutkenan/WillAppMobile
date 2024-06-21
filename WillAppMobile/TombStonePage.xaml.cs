@@ -3,14 +3,15 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using WillAppMobileData.Models;
-using WillAppMobileData.Repositories;
+using WillAppMobileData;  // Ekle
+using WillAppMobileData.Models;  // Ekle
+using WillAppMobileData.Repositories;  // Ekle
 
 namespace WillAppMobile
 {
     public partial class TombStonePage : ContentPage
     {
-        private readonly TombstoneRepository _tombstoneRepository;
+        private readonly UserRepository _userRepository;
         private User _currentUser;
 
         public ObservableCollection<Post> Posts { get; set; } = new ObservableCollection<Post>();
@@ -19,29 +20,27 @@ namespace WillAppMobile
         {
             InitializeComponent();
             BindingContext = this;
-            _tombstoneRepository = new TombstoneRepository(App.Database);
+            _userRepository = new UserRepository(App.Database);
         }
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
             await LoadUserData();
-            await LoadPosts();
+            LoadPosts(); // LoadPosts metodunu async yapmaya gerek yok
         }
 
         private async Task LoadUserData()
         {
-            // Kullanýcýnýn giriþ yapmýþ olduðunu varsayýyoruz
-            int userId = 1; // Bu örnek için sabit deðer kullanýyoruz. Gerçek uygulamada oturum açan kullanýcý ID'si kullanýlacak.
-            _currentUser = await _tombstoneRepository.GetUserWithPostsAsync(userId);
+            _currentUser = await _userRepository.GetUserByIdAsync(App.CurrentUserId);
 
             if (_currentUser != null)
             {
                 userNameLabel.Text = $"{_currentUser.FirstName} {_currentUser.LastName}";
 
-                if (_currentUser.Photo != null && _currentUser.Photo.Length > 0)
+                if (!string.IsNullOrEmpty(_currentUser.Photo))
                 {
-                    profileImage.Source = ImageSource.FromStream(() => new MemoryStream(_currentUser.Photo));
+                    profileImage.Source = ImageSource.FromFile(_currentUser.Photo);
                 }
                 else
                 {
@@ -50,7 +49,7 @@ namespace WillAppMobile
             }
         }
 
-        private async Task LoadPosts()
+        private void LoadPosts()
         {
             if (_currentUser != null && _currentUser.Posts.Any())
             {

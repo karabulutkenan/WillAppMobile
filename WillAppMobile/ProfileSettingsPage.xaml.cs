@@ -2,9 +2,9 @@ using Microsoft.Maui.Controls;
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using WillAppMobileData.Models;
-using WillAppMobileData.Repositories;
-
+using WillAppMobileData;  // Ekle
+using WillAppMobileData.Models;  // Ekle
+using WillAppMobileData.Repositories;  // Ekle
 namespace WillAppMobile
 {
     public partial class ProfileSettingsPage : ContentPage
@@ -30,9 +30,9 @@ namespace WillAppMobile
                 emailEntry.Text = _currentUser.Email;
                 phoneEntry.Text = _currentUser.PhoneNumber;
 
-                if (!string.IsNullOrEmpty(_currentUser.PhotoPath))
+                if (!string.IsNullOrEmpty(_currentUser.Photo))
                 {
-                    profileImage.Source = ImageSource.FromFile(_currentUser.PhotoPath);
+                    profileImage.Source = ImageSource.FromFile(_currentUser.Photo);
                 }
                 else
                 {
@@ -46,7 +46,7 @@ namespace WillAppMobile
             var result = await FilePicker.Default.PickAsync();
             if (result != null)
             {
-                _currentUser.PhotoPath = result.FullPath;
+                _currentUser.Photo = result.FullPath;
                 profileImage.Source = ImageSource.FromFile(result.FullPath);
             }
         }

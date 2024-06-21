@@ -4,22 +4,23 @@
              x:Class="WillAppMobile.WillsPage"
              BackgroundColor="{StaticResource White}">
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Ekle" Clicked="OnAddNewWillClicked"/>
-    </ContentPage.ToolbarItems>
-
-    <ContentPage.Content>
-        <CollectionView ItemsSource="{Binding Wills}" SelectionMode="None">
+    <VerticalStackLayout>
+        <Button Text="Yeni Vasiyet Ekle" Clicked="OnAddNewWillClicked" />
+        <CollectionView ItemsSource="{Binding Wills}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <StackLayout Padding="10" Orientation="Vertical" BackgroundColor="LightGray" Margin="5">
-                        <Label Text="{Binding Title}" FontSize="20" />
-                        <Label Text="{Binding Summary}" FontSize="14" TextColor="Gray" />
-                        <Button Text="Düzenle" Clicked="OnEditWillClicked" CommandParameter="{Binding .}" />
-                        <Button Text="Sil" Clicked="OnDeleteWillClicked" CommandParameter="{Binding .}" />
-                    </StackLayout>
+                    <SwipeView>
+                        <SwipeView.RightItems>
+                            <SwipeItem Text="Düzenle" IconImageSource="edit_icon.png" BackgroundColor="LightGray" CommandParameter="{Binding .}" Invoked="OnEditWill" />
+                            <SwipeItem Text="Sil" IconImageSource="delete_icon.png" BackgroundColor="LightGray" CommandParameter="{Binding .}" Invoked="OnDeleteWill" />
+                        </SwipeView.RightItems>
+                        <Grid Padding="10">
+                            <Label Text="{Binding Title}" FontSize="20" FontAttributes="Bold" />
+                            <Label Text="{Binding Summary}" FontSize="14" />
+                        </Grid>
+                    </SwipeView>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-    </ContentPage.Content>
+    </VerticalStackLayout>
 </ContentPage>
